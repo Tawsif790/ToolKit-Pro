@@ -330,14 +330,19 @@ function updateDisplay() {
 
 // Enhanced keyboard support (Space for result only)
 document.addEventListener('keydown', (e) => {
-    if (e.key === ' ') {
-        e.preventDefault();
-        calculate();
+    const calcActive = document.getElementById('calculator-tool').classList.contains('active-tool');
+    
+    // Only handle keys if calculator is active
+    if (calcActive) {
+        if (e.key === ' ') {
+            e.preventDefault();
+            calculate();
+        }
+        if (e.key === 'Enter') calculate();
+        if (e.key === 'Backspace') deleteLast();
+        if (e.key === 'Escape') clearCalculator();
+        if ('0123456789.+-*/%'.includes(e.key)) appendToCalc(e.key);
     }
-    if (e.key === 'Enter') calculate();
-    if (e.key === 'Backspace') deleteLast();
-    if (e.key === 'Escape') clearCalculator();
-    if ('0123456789.+-*/%'.includes(e.key)) appendToCalc(e.key);
 });
 
         // Tool Navigation
