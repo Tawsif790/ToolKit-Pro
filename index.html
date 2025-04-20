@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniTools - All-in-One Online Toolkit</title>
+    <meta name="description" content="Free online tools: Smart Calculator, QR Generator, Image Compressor, Text Analyzer, and PDF Converter">
+    <meta name="keywords" content="online tools, qr generator, image compressor, pdf converter, text analyzer">
+    <meta property="og:title" content="OmniTools - Free Online Tools Suite">
+    <meta property="og:description" content="Convert text to PDF, compress images, generate QR codes, and analyze text with our free online tools.">
+    <meta property="og:image" content="https://example.com/og-image.jpg">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXX');
+</script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --background: #f8f9fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #bdc3c7;
+        }
+
+        nav {
+            background: var(--primary);
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        nav button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .tool-section {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin: 1rem 0;
+        }
+
+        .active-tool {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Calculator Styles */
+        #calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        #currentCalculation {
+            grid-column: span 4;
+            height: 80px;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            text-align: right;
+            border: 1px solid #eee;
+            word-wrap: break-word;
+            overflow-y: auto;
+        }
+
+        .calc-btn {
+            padding: 1rem;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            transition: all 0.1s;
+        }
+
+        .calc-btn:active {
+            transform: scale(0.95);
+        }
+
+        .operator { background: #2980b9; }
+        .equals { background: #27ae60; }
+        .clear { background: #e74c3c; }
+        .delete { background: #f39c12; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary);
+            color: white;
+            margin-top: auto;
+        }
+
+        /* Other Tools */
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        input, textarea, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #qrcode-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .compressed-image {
+            max-width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            #currentCalculation {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🛠️ OmniTools</h1>
+        <p>Your All-in-One Online Toolkit</p>
+    </header>
+
+    <nav>
+        <button onclick="showTool('calculator')">Calculator</button>
+        <button onclick="showTool('qr')">QR Generator</button>
+        <button onclick="showTool('image')">Image Compressor</button>
+        <button onclick="showTool('text')">Text Analyzer</button>
+    </nav>
+
+    <div class="container">
+        <!-- Calculator -->
+        <div id="calculator-tool" class="tool-section active-tool">
+            <div id="calculator">
+                <div id="currentCalculation">0</div>
+                <button class="calc-btn clear" onclick="clearCalculator()">C</button>
+                <button class="calc-btn delete" onclick="deleteLast()">⌫</button>
+                <button class="calc-btn operator" onclick="appendToCalc('%')">%</button>
+                <button class="calc-btn operator" onclick="appendToCalc('/')">/</button>
+                <button class="calc-btn" onclick="appendToCalc('7')">7</button>
+                <button class="calc-btn" onclick="appendToCalc('8')">8</button>
+                <button class="calc-btn" onclick="appendToCalc('9')">9</button>
+                <button class="calc-btn operator" onclick="appendToCalc('*')">×</button>
+                <button class="calc-btn" onclick="appendToCalc('4')">4</button>
+                <button class="calc-btn" onclick="appendToCalc('5')">5</button>
+                <button class="calc-btn" onclick="appendToCalc('6')">6</button>
+                <button class="calc-btn operator" onclick="appendToCalc('-')">-</button>
+                <button class="calc-btn" onclick="appendToCalc('1')">1</button>
+                <button class="calc-btn" onclick="appendToCalc('2')">2</button>
+                <button class="calc-btn" onclick="appendToCalc('3')">3</button>
+                <button class="calc-btn operator" onclick="appendToCalc('+')">+</button>
+                <button class="calc-btn" onclick="appendToCalc('0')" style="grid-column: span 2">0</button>
+                <button class="calc-btn" onclick="appendToCalc('.')">.</button>
+                <button class="calc-btn equals" onclick="calculate()">=</button>
+            </div>
+        </div>
+
+        <!-- QR Generator -->
+        <div id="qr-tool" class="tool-section">
+            <div class="input-group">
+                <input type="text" id="qr-input" placeholder="Enter text or URL">
+                <button onclick="generateQR()">Generate QR Code</button>
+            </div>
+            <div id="qrcode-container"></div>
+        </div>
+
+        <!-- Image Compressor -->
+        <div id="image-tool" class="tool-section">
+            <div class="input-group">
+                <input type="file" id="image-input" accept="image/*">
+                <select id="quality">
+                    <option value="0.8">High Quality</option>
+                    <option value="0.6">Medium Quality</option>
+                    <option value="0.4">Low Quality</option>
+                </select>
+                <button onclick="compressImage()">Compress Image</button>
+            </div>
+            <div id="image-preview"></div>
+        </div>
+
+        <!-- Text Analyzer -->
+        <div id="text-tool" class="tool-section">
+            <div class="input-group">
+                <textarea id="text-input" rows="8" placeholder="Paste your text here"></textarea>
+                <button onclick="analyzeText()">Analyze Text</button>
+            </div>
+            <div class="result" id="text-result"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Developed with ❤️ by Tawsif Ahmed</p>
+        <p>© 2024 OmniTools - All rights reserved</p>
+    </footer>
+
+    <script>
+        // Calculator Logic
+        let calculation = '0';
+        const calcDisplay = document.getElementById('currentCalculation');
+
+        function appendToCalc(value) {
+            if (calculation === '0' && !['.', '%'].includes(value)) {
+                calculation = value;
+            } else {
+                calculation += value;
+            }
+            updateDisplay();
+        }
+
+        function clearCalculator() {
+            calculation = '0';
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            calculation = calculation.length > 1 ? calculation.slice(0, -1) : '0';
+            updateDisplay();
+        }
+
+        function calculate() {
+            try {
+                calculation = calculation.replace(/(\d+%)/g, match => `*${parseFloat(match)/100}`);
+                let result = eval(calculation);
+                result = Number.isInteger(result) ? result : parseFloat(result.toFixed(4));
+                calculation = result.toString();
+                updateDisplay();
+            } catch {
+                calculation = 'Error';
+                updateDisplay();
+                setTimeout(clearCalculator, 1500);
+            }
+        }
+
+        function updateDisplay() {
+            calcDisplay.textContent = calculation.replace(/\*/g, '×').replace(/\//g, '÷');
+        }
+
+        // Keyboard Support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                calculate();
+            }
+            if (e.key === 'Backspace') deleteLast();
+            if (e.key === 'Escape') clearCalculator();
+            if ('0123456789.+-*/%'.includes(e.key)) appendToCalc(e.key);
+        });
+
+        // Tool Navigation
+        function showTool(toolId) {
+            document.querySelectorAll('.tool-section').forEach(tool => {
+                tool.classList.remove('active-tool');
+            });
+            document.getElementById(`${toolId}-tool`).classList.add('active-tool');
+        }
+
+        // QR Generator
+        function generateQR() {
+            const text = document.getElementById('qr-input').value.trim();
+            if (!text) return;
+
+            const qr = qrcode(0, 'M');
+            qr.addData(text);
+            qr.make();
+            
+            document.getElementById('qrcode-container').innerHTML = 
+                qr.createSvgTag({ cellSize: 8, margin: 4, scalable: true });
+        }
+
+        // Image Compressor
+        function compressImage() {
+            const input = document.getElementById('image-input');
+            if (!input.files[0]) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const quality = parseFloat(document.getElementById('quality').value);
+                    
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    
+                    const compressedData = canvas.toDataURL('image/jpeg', quality);
+                    document.getElementById('image-preview').innerHTML = `
+                        <img src="${compressedData}" class="compressed-image">
+                        <a href="${compressedData}" download="compressed.jpg">
+                            <button style="margin-top: 1rem">Download</button>
+                        </a>
+                    `;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        // Text Analyzer
+        function analyzeText() {
+            const text = document.getElementById('text-input').value;
+            const words = text.trim().split(/\s+/).filter(w => w).length;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim()).length;
+            
+            document.getElementById('text-result').innerHTML = `
+                📝 Words: ${words}<br>
+                📑 Sentences: ${sentences}<br>
+                🔤 Characters (with spaces): ${text.length}<br>
+                🔡 Characters (without spaces): ${text.replace(/\s/g, '').length}
+            `;
+        }
+    </script>
+</body>
+</html>
