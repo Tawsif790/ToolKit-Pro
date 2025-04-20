@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OmniTools - Free QR Generator, Image Compressor & Text Tools</title>
-    <meta name="description" content="Free online tools: QR Generator, Image Compressor, Text Analyzer, and Smart Calculator">
-    <meta name="description" content="Free online tools: QR Generator, Image Compressor, Text Analyzer, and Smart Calculator. No signup required - use directly in your browser.">
-    <meta name="keywords" content="free online tools, qr code generator, image compressor, text analyzer, smart calculator">
+
+
+
+      <meta name="description" content="Free instant tools: QR generator, image compressor, text analyzer & smart calculator. No ads, no signups.">
+    <meta name="keywords" content="free tools, online calculator, qr code maker, compress images, word counter">
+
     <meta property="og:title" content="OmniTools - Free Online Utility Tools">
     <meta property="og:url" content="https://tawsif790.github.io/omni-tools.html">
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator/qrcode.min.js"></script>
@@ -159,7 +162,10 @@
             border-radius: 8px;
             font-size: 1rem;
         }
-
+        .dark-mode {
+          background: #1a1a1a;
+          color: white;
+        }
         button {
             background: var(--secondary);
             color: white;
@@ -182,7 +188,12 @@
             .container {
                 padding: 1rem;
             }
-            
+         @media (max-width: 600px) {
+                  textarea {
+                width: 95%;
+                margin: 0 auto;
+          }
+}
             #currentCalculation {
                 font-size: 1.2rem;
             }
@@ -266,6 +277,8 @@
     <footer>
         <p>Developed with ❤️ by Tawsif Ahmed</p>
         <p>© 2024 OmniTools - All rights reserved</p>
+        <p>❤️ Loved this tool? <a href="https://www.buymeacoffee.com/yourusername">Buy me a coffee</a>!</p>
+        <p>Need web hosting? <a href="https://your-affiliate-link.com">Try DigitalOcean</a></p>
     </footer>
 
     <script>
