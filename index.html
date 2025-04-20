@@ -276,63 +276,69 @@
 
     <footer>
         <p>Developed with ❤️ by Tawsif Ahmed</p>
-        <p>© 2024 OmniTools - All rights reserved</p>
+        <p>© 2025 OmniTools - All rights reserved</p>
        <!-- <p>❤️ Loved this tool? <a href="https://www.buymeacoffee.com/yourusername">Buy me a coffee</a>!</p>
         <p>Need web hosting? <a href="https://your-affiliate-link.com">Try DigitalOcean</a></p> -->
     </footer>
 
     <script>
         // Calculator Logic
-        let calculation = '0';
-        const calcDisplay = document.getElementById('currentCalculation');
+        // Replace existing calculator functions with this
+let calculation = '0';
+const calcDisplay = document.getElementById('currentCalculation');
 
-        function appendToCalc(value) {
-            if (calculation === '0' && !['.', '%'].includes(value)) {
-                calculation = value;
-            } else {
-                calculation += value;
-            }
-            updateDisplay();
-        }
+function appendToCalc(value) {
+    if (calculation === '0' && !['.', '%'].includes(value)) {
+        calculation = value;
+    } else {
+        calculation += value;
+    }
+    updateDisplay();
+}
 
-        function clearCalculator() {
-            calculation = '0';
-            updateDisplay();
-        }
+function clearCalculator() {
+    calculation = '0';
+    updateDisplay();
+}
 
-        function deleteLast() {
-            calculation = calculation.length > 1 ? calculation.slice(0, -1) : '0';
-            updateDisplay();
-        }
+function deleteLast() {
+    calculation = calculation.length > 1 ? calculation.slice(0, -1) : '0';
+    updateDisplay();
+}
 
-        function calculate() {
-            try {
-                calculation = calculation.replace(/(\d+%)/g, match => `*${parseFloat(match)/100}`);
-                let result = eval(calculation);
-                result = Number.isInteger(result) ? result : parseFloat(result.toFixed(4));
-                calculation = result.toString();
-                updateDisplay();
-            } catch {
-                calculation = 'Error';
-                updateDisplay();
-                setTimeout(clearCalculator, 1500);
-            }
-        }
-
-        function updateDisplay() {
-            calcDisplay.textContent = calculation.replace(/\*/g, '×').replace(/\//g, '÷');
-        }
-
-        // Keyboard Support
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                calculate();
-            }
-            if (e.key === 'Backspace') deleteLast();
-            if (e.key === 'Escape') clearCalculator();
-            if ('0123456789.+-*/%'.includes(e.key)) appendToCalc(e.key);
+function calculate() {
+    try {
+        // Handle percentages properly
+        calculation = calculation.replace(/(\d+(\.\d+)?)%/g, (match) => {
+            return parseFloat(match) / 100;
         });
+        
+        let result = eval(calculation);
+        result = Number.isInteger(result) ? result : parseFloat(result.toFixed(4));
+        calculation = result.toString();
+        updateDisplay();
+    } catch {
+        calculation = 'Error';
+        updateDisplay();
+        setTimeout(clearCalculator, 1500);
+    }
+}
+
+function updateDisplay() {
+    calcDisplay.textContent = calculation.replace(/\*/g, '×').replace(/\//g, '÷');
+}
+
+// Enhanced keyboard support (Space for result only)
+document.addEventListener('keydown', (e) => {
+    if (e.key === ' ') {
+        e.preventDefault();
+        calculate();
+    }
+    if (e.key === 'Enter') calculate();
+    if (e.key === 'Backspace') deleteLast();
+    if (e.key === 'Escape') clearCalculator();
+    if ('0123456789.+-*/%'.includes(e.key)) appendToCalc(e.key);
+});
 
         // Tool Navigation
         function showTool(toolId) {
